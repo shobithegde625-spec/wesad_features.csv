@@ -1,36 +1,17 @@
-
+"""Regenerate plots from a versioned evaluation run."""
+import argparse
+from pathlib import Path
 import pandas as pd
-import matplotlib.pyplot as plt
+from pulsepoint.reporting import plot_report
 
-# Load the model comparison results
-df = pd.read_csv("model_comparison.csv")
 
-# Show the results in the terminal
-print("Model comparison results:")
-print(df.round(3).to_string(index=False))
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--report", type=Path, required=True)
+    args = parser.parse_args()
+    plot_report(pd.read_csv(args.report / "predictions.csv"), args.report)
+    print(args.report / "evaluation.png")
 
-# Create a graph comparing model performance
-metrics = [
-    "Accuracy",
-    "Balanced Accuracy",
-    "Stress F1"
-]
 
-ax = df.set_index("Model")[metrics].plot(
-    kind="bar",
-    figsize=(10, 6),
-    ylim=(0, 1),
-    width=0.75
-)
-
-ax.set_title("Stress Detection: Model Performance Comparison")
-ax.set_ylabel("Score")
-ax.set_xlabel("Machine Learning Model")
-ax.legend(title="Evaluation Metric")
-ax.tick_params(axis="x", rotation=15)
-
-plt.tight_layout()
-plt.savefig("model_comparison.png", dpi=300)
-plt.show()
-
-print("\nSaved graph as model_comparison.png")
+if __name__ == "__main__":
+    main()

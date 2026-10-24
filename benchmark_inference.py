@@ -1,31 +1,27 @@
+"""Benchmark real processing branches with reproducible representative windows."""
+import argparse
+from pathlib import Path
+from pulsepoint.data import BASE_DIR
+from pulsepoint.benchmark import benchmark
+from pulsepoint.corruption import SCENARIOS
 
-import time
-import joblib
-import pandas as pd
-import numpy as np
 
-saved = joblib.load("stress_detection_model.joblib")
-model = saved["model"]
-features = saved["features"]
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--bundle", type=Path, required=True)
+    parser.add_argument("--data", type=Path, default=BASE_DIR / "wesad_features.csv")
+    parser.add_argument("--raw-root", type=Path)
+    parser.add_argument("--output", type=Path, required=True, help="New directory")
+    parser.add_argument("--limit", type=int, default=100)
+    parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument("--scenarios", nargs="+", choices=list(SCENARIOS), default=["clean"])
+    args = parser.parse_args()
+    try:
+        report = benchmark(args.bundle, args.data, args.output, args.raw_root, args.limit, args.repeats, tuple(args.scenarios))
+    except (ValueError, FileExistsError, FileNotFoundError) as exc:
+        parser.error(str(exc))
+    print(f"Saved {args.output / 'benchmark.json'}; input: {report['input_kind']}")
 
-df = pd.read_csv("wesad_features.csv")
-sample = df[features].iloc[[0]]
 
-# Warm-up predictions (not included in timing)
-for _ in range(5):
-    model.predict(sample)
-
-# Measure 100 individual predictions
-times_ms = []
-
-for _ in range(100):
-    start = time.perf_counter()
-    model.predict(sample)
-    times_ms.append((time.perf_counter() - start) * 1000)
-
-print("--- Inference Benchmark ---")
-print("Number of predictions:", len(times_ms))
-print(f"Mean latency: {np.mean(times_ms):.3f} ms")
-print(f"Median latency: {np.median(times_ms):.3f} ms")
-print(f"95th percentile: {np.percentile(times_ms, 95):.3f} ms")
-print(f"Maximum latency: {np.max(times_ms):.3f} ms")
+if __name__ == "__main__":
+    main()

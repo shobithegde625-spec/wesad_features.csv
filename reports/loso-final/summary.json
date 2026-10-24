@@ -1,0 +1,556 @@
+{
+  "evaluation_id": "dda6591a1182",
+  "protocol": "loso",
+  "seed": 42,
+  "dataset_sha256": "746609cfc4d39c6ff29aa202a7f10b0ef44f12f3901300d761581c8fdf2b42ef",
+  "source_code_sha256": "4277885f05d4db324758c9eab6bfdac303b46efa9cd2cd2767d16474c0805949",
+  "subjects": 15,
+  "training_labeled_windows": 445,
+  "windows": 445,
+  "replay_sha256": null,
+  "waveform_processing_measured": false,
+  "multimodal": false,
+  "environment": {
+    "python": "3.14.3 (main, Feb  3 2026, 15:32:20) [Clang 17.0.0 (clang-1700.6.3.2)]",
+    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.0",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "joblib": "1.6.0",
+      "streamlit": "1.66.1",
+      "threadpoolctl": "3.7.0",
+      "psutil": "7.2.2"
+    }
+  },
+  "results": [
+    {
+      "method": "legacy_logistic",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 1.0,
+        "baseline_coverage": 1.0,
+        "stress_coverage": 1.0,
+        "all_window_stress_recall": 0.70625,
+        "probability_coverage": 1.0,
+        "escalation_fraction": 0.0,
+        "accuracy": 0.7348314606741573,
+        "balanced_accuracy": 0.728563596491228,
+        "stress_precision": 0.6141304347826086,
+        "stress_recall": 0.70625,
+        "stress_f1": 0.6569767441860465,
+        "selective_error": 0.2651685393258427,
+        "brier": 0.17291274415682262,
+        "log_loss": 0.5196098466199047,
+        "accepted_brier": 0.17291274415682262,
+        "accepted_log_loss": 0.5196098466199047,
+        "mean_total_ms": 1.8054431542398388,
+        "p95_total_ms": 2.109541185200214
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.7252365762892078,
+          "lower_95": 0.5954060340244551,
+          "upper_95": 0.8442163742690058,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.6995959595959597,
+          "lower_95": 0.4963636363636364,
+          "upper_95": 0.8802575757575757,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 1.0,
+          "lower_95": 1.0,
+          "upper_95": 1.0,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.6206332435574635,
+          "lower_95": 0.43152199351698184,
+          "upper_95": 0.7990594267256259,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.2659547645532072,
+          "lower_95": 0.14479118773946362,
+          "upper_95": 0.391699357310592,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    },
+    {
+      "method": "legacy_svm",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 1.0,
+        "baseline_coverage": 1.0,
+        "stress_coverage": 1.0,
+        "all_window_stress_recall": 0.75625,
+        "probability_coverage": 0.0,
+        "escalation_fraction": 0.0,
+        "accuracy": 0.8359550561797753,
+        "balanced_accuracy": 0.8184758771929824,
+        "stress_precision": 0.7806451612903226,
+        "stress_recall": 0.75625,
+        "stress_f1": 0.7682539682539683,
+        "selective_error": 0.16404494382022472,
+        "brier": null,
+        "log_loss": null,
+        "accepted_brier": null,
+        "accepted_log_loss": null,
+        "mean_total_ms": 1.0297925824958705,
+        "p95_total_ms": 1.2338333996012805
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.8151993620414671,
+          "lower_95": 0.6945554226475279,
+          "upper_95": 0.9119298245614035,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.7496969696969698,
+          "lower_95": 0.5532272727272728,
+          "upper_95": 0.92,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 1.0,
+          "lower_95": 1.0,
+          "upper_95": 1.0,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.7197635199699184,
+          "lower_95": 0.5281654358176545,
+          "upper_95": 0.8906292722030597,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.1635125448028674,
+          "lower_95": 0.06812260536398468,
+          "upper_95": 0.25463261648745517,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    },
+    {
+      "method": "legacy_forest",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 1.0,
+        "baseline_coverage": 1.0,
+        "stress_coverage": 1.0,
+        "all_window_stress_recall": 0.80625,
+        "probability_coverage": 1.0,
+        "escalation_fraction": 0.0,
+        "accuracy": 0.7730337078651686,
+        "balanced_accuracy": 0.7803179824561404,
+        "stress_precision": 0.6482412060301508,
+        "stress_recall": 0.80625,
+        "stress_f1": 0.7186629526462396,
+        "selective_error": 0.22696629213483147,
+        "brier": 0.16971123595505616,
+        "log_loss": 0.5196564821008215,
+        "accepted_brier": 0.16971123595505616,
+        "accepted_log_loss": 0.5196564821008215,
+        "mean_total_ms": 11.896115237339451,
+        "p95_total_ms": 13.904815982095897
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.778708133971292,
+          "lower_95": 0.67692663476874,
+          "upper_95": 0.8713512759170653,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.803030303030303,
+          "lower_95": 0.6163484848484849,
+          "upper_95": 0.9563636363636364,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 1.0,
+          "lower_95": 1.0,
+          "upper_95": 1.0,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.6803867111983951,
+          "lower_95": 0.5120629335487055,
+          "upper_95": 0.8379445418272402,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.22792238289457423,
+          "lower_95": 0.13023198615745893,
+          "upper_95": 0.30899709553825244,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    },
+    {
+      "method": "ecg",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 1.0,
+        "baseline_coverage": 1.0,
+        "stress_coverage": 1.0,
+        "all_window_stress_recall": 0.54375,
+        "probability_coverage": 1.0,
+        "escalation_fraction": 0.0,
+        "accuracy": 0.8157303370786517,
+        "balanced_accuracy": 0.7560855263157895,
+        "stress_precision": 0.90625,
+        "stress_recall": 0.54375,
+        "stress_f1": 0.6796875,
+        "selective_error": 0.1842696629213483,
+        "brier": 0.15909728508125,
+        "log_loss": 0.7133300768562046,
+        "accepted_brier": 0.15909728508125,
+        "accepted_log_loss": 0.7133300768562046,
+        "mean_quality_ms": 0.0,
+        "p95_quality_ms": 0.0,
+        "mean_feature_ms": 0.0,
+        "p95_feature_ms": 0.0,
+        "mean_inference_ms": 3.754881180147902,
+        "p95_inference_ms": 6.515875400509685,
+        "mean_total_ms": 3.7826061921110483,
+        "p95_total_ms": 6.5484672319144,
+        "mean_cpu_ms": 3.7236943820223716,
+        "p95_cpu_ms": 6.498999999998033
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.755725677830941,
+          "lower_95": 0.6499254385964912,
+          "upper_95": 0.8515095693779903,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.543030303030303,
+          "lower_95": 0.32843939393939386,
+          "upper_95": 0.7466969696969696,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 1.0,
+          "lower_95": 1.0,
+          "upper_95": 1.0,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.5705847529376942,
+          "lower_95": 0.3634378094672212,
+          "upper_95": 0.7781200662083014,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.18404399950562353,
+          "lower_95": 0.10903256704980843,
+          "upper_95": 0.2524764553207267,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    },
+    {
+      "method": "confidence_only",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 0.9483146067415731,
+        "baseline_coverage": 0.9614035087719298,
+        "stress_coverage": 0.925,
+        "all_window_stress_recall": 0.50625,
+        "probability_coverage": 1.0,
+        "escalation_fraction": 0.051685393258426963,
+        "accuracy": 0.8199052132701422,
+        "balanced_accuracy": 0.757225290984415,
+        "stress_precision": 0.9,
+        "stress_recall": 0.5472972972972973,
+        "stress_f1": 0.680672268907563,
+        "selective_error": 0.18009478672985782,
+        "brier": 0.15909728508125,
+        "log_loss": 0.7133300768562046,
+        "accepted_brier": 0.15702449906735874,
+        "accepted_log_loss": 0.7203731387316137,
+        "mean_quality_ms": 0.0,
+        "p95_quality_ms": 0.0,
+        "mean_feature_ms": 0.0,
+        "p95_feature_ms": 0.0,
+        "mean_inference_ms": 3.7006858639481863,
+        "p95_inference_ms": 6.56570019200444,
+        "mean_total_ms": 3.7287779130156706,
+        "p95_total_ms": 6.5965920104645175,
+        "mean_cpu_ms": 3.7164382022472533,
+        "p95_cpu_ms": 6.552199999999786
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.7513869902027797,
+          "lower_95": 0.6465533151059467,
+          "upper_95": 0.8531606715652769,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.503030303030303,
+          "lower_95": 0.2884545454545454,
+          "upper_95": 0.7133636363636363,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 0.9473563218390805,
+          "lower_95": 0.8949310344827586,
+          "upper_95": 0.9885057471264368,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.5619505984211866,
+          "lower_95": 0.35526546982429336,
+          "upper_95": 0.7619646040234275,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.17876021689550411,
+          "lower_95": 0.10215312998771271,
+          "upper_95": 0.24958812999988375,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    },
+    {
+      "method": "cascade",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 0.9483146067415731,
+        "baseline_coverage": 0.9614035087719298,
+        "stress_coverage": 0.925,
+        "all_window_stress_recall": 0.50625,
+        "probability_coverage": 1.0,
+        "escalation_fraction": 0.051685393258426963,
+        "accuracy": 0.8199052132701422,
+        "balanced_accuracy": 0.757225290984415,
+        "stress_precision": 0.9,
+        "stress_recall": 0.5472972972972973,
+        "stress_f1": 0.680672268907563,
+        "selective_error": 0.18009478672985782,
+        "brier": 0.15909728508125,
+        "log_loss": 0.7133300768562046,
+        "accepted_brier": 0.15702449906735874,
+        "accepted_log_loss": 0.7203731387316137,
+        "mean_quality_ms": 0.0,
+        "p95_quality_ms": 0.0,
+        "mean_feature_ms": 0.0,
+        "p95_feature_ms": 0.0,
+        "mean_inference_ms": 3.733329107367507,
+        "p95_inference_ms": 6.594766583293676,
+        "mean_total_ms": 3.762006549441957,
+        "p95_total_ms": 6.651074392721055,
+        "mean_cpu_ms": 3.732173033707822,
+        "p95_cpu_ms": 6.56520000000036
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.7513869902027797,
+          "lower_95": 0.6465533151059467,
+          "upper_95": 0.8531606715652769,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.503030303030303,
+          "lower_95": 0.2884545454545454,
+          "upper_95": 0.7133636363636363,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 0.9473563218390805,
+          "lower_95": 0.8949310344827586,
+          "upper_95": 0.9885057471264368,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.5619505984211866,
+          "lower_95": 0.35526546982429336,
+          "upper_95": 0.7619646040234275,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.17876021689550411,
+          "lower_95": 0.10215312998771271,
+          "upper_95": 0.24958812999988375,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    },
+    {
+      "method": "no_abstention",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 1.0,
+        "baseline_coverage": 1.0,
+        "stress_coverage": 1.0,
+        "all_window_stress_recall": 0.54375,
+        "probability_coverage": 1.0,
+        "escalation_fraction": 0.051685393258426963,
+        "accuracy": 0.8157303370786517,
+        "balanced_accuracy": 0.7560855263157895,
+        "stress_precision": 0.90625,
+        "stress_recall": 0.54375,
+        "stress_f1": 0.6796875,
+        "selective_error": 0.1842696629213483,
+        "brier": 0.15909728508125,
+        "log_loss": 0.7133300768562046,
+        "accepted_brier": 0.15909728508125,
+        "accepted_log_loss": 0.7133300768562046,
+        "mean_quality_ms": 0.0,
+        "p95_quality_ms": 0.0,
+        "mean_feature_ms": 0.0,
+        "p95_feature_ms": 0.0,
+        "mean_inference_ms": 3.727763582130873,
+        "p95_inference_ms": 6.477241613902151,
+        "mean_total_ms": 3.7564468929763843,
+        "p95_total_ms": 6.5076913801021865,
+        "mean_cpu_ms": 3.7121707865169293,
+        "p95_cpu_ms": 6.4768000000000825
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.755725677830941,
+          "lower_95": 0.6499254385964912,
+          "upper_95": 0.8515095693779903,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.543030303030303,
+          "lower_95": 0.32843939393939386,
+          "upper_95": 0.7466969696969696,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 1.0,
+          "lower_95": 1.0,
+          "upper_95": 1.0,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.5705847529376942,
+          "lower_95": 0.3634378094672212,
+          "upper_95": 0.7781200662083014,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.18404399950562353,
+          "lower_95": 0.10903256704980843,
+          "upper_95": 0.2524764553207267,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    },
+    {
+      "method": "cascade_single_window",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 0.9483146067415731,
+        "baseline_coverage": 0.9614035087719298,
+        "stress_coverage": 0.925,
+        "all_window_stress_recall": 0.50625,
+        "probability_coverage": 1.0,
+        "escalation_fraction": 0.051685393258426963,
+        "accuracy": 0.8199052132701422,
+        "balanced_accuracy": 0.757225290984415,
+        "stress_precision": 0.9,
+        "stress_recall": 0.5472972972972973,
+        "stress_f1": 0.680672268907563,
+        "selective_error": 0.18009478672985782,
+        "brier": 0.15909728508125,
+        "log_loss": 0.7133300768562046,
+        "accepted_brier": 0.15702449906735874,
+        "accepted_log_loss": 0.7203731387316137,
+        "mean_quality_ms": 0.0,
+        "p95_quality_ms": 0.0,
+        "mean_feature_ms": 0.0,
+        "p95_feature_ms": 0.0,
+        "mean_inference_ms": 3.7151837038671536,
+        "p95_inference_ms": 6.632566184271127,
+        "mean_total_ms": 3.749954152402332,
+        "p95_total_ms": 6.662966404110193,
+        "mean_cpu_ms": 3.726995505617959,
+        "p95_cpu_ms": 6.589000000001021
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.7513869902027797,
+          "lower_95": 0.6465533151059467,
+          "upper_95": 0.8531606715652769,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.503030303030303,
+          "lower_95": 0.2884545454545454,
+          "upper_95": 0.7133636363636363,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 0.9473563218390805,
+          "lower_95": 0.8949310344827586,
+          "upper_95": 0.9885057471264368,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.5619505984211866,
+          "lower_95": 0.35526546982429336,
+          "upper_95": 0.7619646040234275,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.17876021689550411,
+          "lower_95": 0.10215312998771271,
+          "upper_95": 0.24958812999988375,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    }
+  ],
+  "selection_rule": "inner grouped model selection, disjoint sigmoid calibration, policy-subject threshold search",
+  "limitations": [
+    "15-person laboratory data does not establish real-world alert rates",
+    "Stored-feature timings exclude feature extraction",
+    "Outer-fold estimates assess the training procedure, not the final deployment artifact"
+  ]
+}

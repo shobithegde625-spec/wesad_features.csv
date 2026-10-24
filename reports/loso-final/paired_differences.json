@@ -1,0 +1,562 @@
+[
+  {
+    "method": "legacy_logistic",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": -0.10343434343434343,
+    "lower_95": -0.26666666666666666,
+    "upper_95": 0.030303030303030307,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_logistic",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_logistic",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": 0.03803238165863305,
+    "lower_95": -0.09354678037325423,
+    "upper_95": 0.1827816091954023,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_logistic",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": -10.080858872142237,
+    "lower_95": -10.502669101422882,
+    "upper_95": -9.848930838317994,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_svm",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": -0.05333333333333333,
+    "lower_95": -0.13999999999999999,
+    "upper_95": 0.01333333333333333,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_svm",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_svm",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": -0.06440983809170683,
+    "lower_95": -0.1483544061302682,
+    "upper_95": 0.010531022123346924,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_svm",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": -10.855850850931592,
+    "lower_95": -11.336299475278913,
+    "upper_95": -10.600225331358285,
+    "subjects": 15
+  },
+  {
+    "method": "ecg",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": -0.26,
+    "lower_95": -0.4424848484848485,
+    "upper_95": -0.10421212121212126,
+    "subjects": 15
+  },
+  {
+    "method": "ecg",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "ecg",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": -0.043878383388950684,
+    "lower_95": -0.11845977011494253,
+    "upper_95": 0.028305524657026328,
+    "subjects": 15
+  },
+  {
+    "method": "ecg",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": -8.116156315570594,
+    "lower_95": -9.619285279865489,
+    "upper_95": -6.808039112758849,
+    "subjects": 15
+  },
+  {
+    "method": "confidence_only",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": -0.3,
+    "lower_95": -0.4994242424242424,
+    "upper_95": -0.12237878787878792,
+    "subjects": 15
+  },
+  {
+    "method": "confidence_only",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": -0.052643678160919534,
+    "lower_95": -0.10551724137931033,
+    "upper_95": -0.01149425287356322,
+    "subjects": 15
+  },
+  {
+    "method": "confidence_only",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": -0.04916216599907013,
+    "lower_95": -0.12537675926993766,
+    "upper_95": 0.017222965807786303,
+    "subjects": 15
+  },
+  {
+    "method": "confidence_only",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": -8.171290971747288,
+    "lower_95": -9.719309129816184,
+    "upper_95": -6.636961606607878,
+    "subjects": 15
+  },
+  {
+    "method": "cascade",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": -0.3,
+    "lower_95": -0.4969696969696969,
+    "upper_95": -0.12181818181818183,
+    "subjects": 15
+  },
+  {
+    "method": "cascade",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": -0.052643678160919534,
+    "lower_95": -0.10097126436781609,
+    "upper_95": -0.01328735632183912,
+    "subjects": 15
+  },
+  {
+    "method": "cascade",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": -0.04916216599907013,
+    "lower_95": -0.1277534089080816,
+    "upper_95": 0.019253195236312543,
+    "subjects": 15
+  },
+  {
+    "method": "cascade",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": -8.139376403051989,
+    "lower_95": -9.614002701175014,
+    "upper_95": -6.756953225227876,
+    "subjects": 15
+  },
+  {
+    "method": "no_abstention",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": -0.26,
+    "lower_95": -0.43825757575757573,
+    "upper_95": -0.099969696969697,
+    "subjects": 15
+  },
+  {
+    "method": "no_abstention",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "no_abstention",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": -0.043878383388950684,
+    "lower_95": -0.12559195402298848,
+    "upper_95": 0.025788283277715977,
+    "subjects": 15
+  },
+  {
+    "method": "no_abstention",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": -8.145447517868506,
+    "lower_95": -9.601277576156988,
+    "upper_95": -6.719691504569762,
+    "subjects": 15
+  },
+  {
+    "method": "cascade_single_window",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": -0.3,
+    "lower_95": -0.5079393939393939,
+    "upper_95": -0.12116666666666669,
+    "subjects": 15
+  },
+  {
+    "method": "cascade_single_window",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": -0.052643678160919534,
+    "lower_95": -0.10276436781609193,
+    "upper_95": -0.01333333333333333,
+    "subjects": 15
+  },
+  {
+    "method": "cascade_single_window",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": -0.04916216599907013,
+    "lower_95": -0.12481046102718331,
+    "upper_95": 0.01960462981449262,
+    "subjects": 15
+  },
+  {
+    "method": "cascade_single_window",
+    "reference": "legacy_forest",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": -8.150353265957666,
+    "lower_95": -9.620466423357346,
+    "upper_95": -6.86887876250907,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_logistic",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": 0.19656565656565658,
+    "lower_95": 0.0908939393939394,
+    "upper_95": 0.31960606060606056,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_logistic",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.052643678160919534,
+    "lower_95": 0.01328735632183908,
+    "upper_95": 0.10298850574712644,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_logistic",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": 0.08719454765770315,
+    "lower_95": -0.010882691224923332,
+    "upper_95": 0.22521691938701177,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_logistic",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": -1.9095679003949455,
+    "lower_95": -2.9781518326618492,
+    "upper_95": -0.6041669695642806,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_svm",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": 0.24666666666666667,
+    "lower_95": 0.08842424242424243,
+    "upper_95": 0.4267424242424242,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_svm",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.052643678160919534,
+    "lower_95": 0.013563218390804595,
+    "upper_95": 0.10114942528735632,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_svm",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": -0.015247672092636702,
+    "lower_95": -0.05025299678990575,
+    "upper_95": 0.0186668098034431,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_svm",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": -2.6845598791842997,
+    "lower_95": -3.995106500459239,
+    "upper_95": -1.3644073991541004,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_forest",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": 0.3,
+    "lower_95": 0.12543939393939393,
+    "upper_95": 0.4940454545454544,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_forest",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.052643678160919534,
+    "lower_95": 0.01149425287356322,
+    "upper_95": 0.10024137931034484,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_forest",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": 0.04916216599907013,
+    "lower_95": -0.01853454388971308,
+    "upper_95": 0.11881076068895059,
+    "subjects": 15
+  },
+  {
+    "method": "legacy_forest",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": 8.171290971747288,
+    "lower_95": 6.6344370510252375,
+    "upper_95": 9.634348392344059,
+    "subjects": 15
+  },
+  {
+    "method": "ecg",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": 0.04,
+    "lower_95": 0.0,
+    "upper_95": 0.11999999999999998,
+    "subjects": 15
+  },
+  {
+    "method": "ecg",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.052643678160919534,
+    "lower_95": 0.011264367816091954,
+    "upper_95": 0.10096551724137927,
+    "subjects": 15
+  },
+  {
+    "method": "ecg",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": 0.005283782610119443,
+    "lower_95": -0.013834443889166522,
+    "upper_95": 0.023927195590239068,
+    "subjects": 15
+  },
+  {
+    "method": "ecg",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": 0.05513465617669506,
+    "lower_95": -0.015922654095434367,
+    "upper_95": 0.17840541210843794,
+    "subjects": 15
+  },
+  {
+    "method": "cascade",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "cascade",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "cascade",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "cascade",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": 0.031914568695300315,
+    "lower_95": -0.01203116277140348,
+    "upper_95": 0.09549998843647667,
+    "subjects": 15
+  },
+  {
+    "method": "no_abstention",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": 0.04,
+    "lower_95": 0.0,
+    "upper_95": 0.11999999999999998,
+    "subjects": 15
+  },
+  {
+    "method": "no_abstention",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.052643678160919534,
+    "lower_95": 0.01328735632183908,
+    "upper_95": 0.10092528735632184,
+    "subjects": 15
+  },
+  {
+    "method": "no_abstention",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": 0.005283782610119443,
+    "lower_95": -0.012695689192440815,
+    "upper_95": 0.02509677604217834,
+    "subjects": 15
+  },
+  {
+    "method": "no_abstention",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": 0.025843453878784676,
+    "lower_95": -0.03906856140245727,
+    "upper_95": 0.12101057345440974,
+    "subjects": 15
+  },
+  {
+    "method": "cascade_single_window",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "all_window_stress_recall",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "cascade_single_window",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "coverage",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "cascade_single_window",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "selective_error",
+    "mean_difference": 0.0,
+    "lower_95": 0.0,
+    "upper_95": 0.0,
+    "subjects": 15
+  },
+  {
+    "method": "cascade_single_window",
+    "reference": "confidence_only",
+    "scenario": "clean",
+    "metric": "mean_total_ms",
+    "mean_difference": 0.02093770578962307,
+    "lower_95": -0.00799039474485822,
+    "upper_95": 0.05744054719229452,
+    "subjects": 15
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "captured_at": "2026-10-24T04:04:49.498Z",
+  "source": "Actual local Streamlit app.py",
+  "artifact_id": "dae3a7c563c9",
+  "scenario": "clean",
+  "policy": "cascade",
+  "note": "Light browser theme; local filesystem fields hidden and sidebar select-text contrast corrected with capture-only CSS. No predictions or metrics edited."
+}

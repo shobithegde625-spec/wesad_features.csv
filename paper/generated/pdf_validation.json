@@ -1,0 +1,43 @@
+{
+  "pages": 12,
+  "section_start_pages": {
+    "I.INTRODUCTION": [
+      1
+    ],
+    "II.LITERATURESURVEY": [
+      2
+    ],
+    "VI.PROPOSEDAIOTMETHODOLOGY": [
+      4
+    ],
+    "VII.IMPLEMENTATIONANDEXPERIMENTALSETUP": [
+      7
+    ],
+    "VIII.RESULTSANDDISCUSSION": [
+      7
+    ],
+    "IX.LIMITATIONSANDETHICALCONSIDERATIONS": [
+      12
+    ],
+    "XI.CONCLUSION": [
+      12
+    ],
+    "REFERENCES": [
+      12
+    ]
+  },
+  "compiled_successfully": true,
+  "overfull_boxes": 0,
+  "undefined_references": 0,
+  "visual_review_pages": [
+    1,
+    5,
+    8,
+    9,
+    11,
+    12
+  ],
+  "compiler": "Tectonic 0.17.0",
+  "minor_underfull_spacing_warnings": 10,
+  "main_tex_sha256": "c19645760aaae86e963d29ecde6acd43c3867f72aadab59696cdbf2eed5417f5"
+}

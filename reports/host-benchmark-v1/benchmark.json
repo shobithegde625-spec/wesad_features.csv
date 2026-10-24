@@ -1,0 +1,115 @@
+{
+  "artifact_id": "762588cd1c64",
+  "loading_ms": 1.5245829708874226,
+  "bundle_bytes": 2982,
+  "rss_before_measurement_bytes": 207339520,
+  "rss_after_measurement_bytes": 209059840,
+  "environment": {
+    "python": "3.14.3 (main, Feb  3 2026, 15:32:20) [Clang 17.0.0 (clang-1700.6.3.2)]",
+    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.0",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "joblib": "1.6.0",
+      "streamlit": "1.66.1",
+      "threadpoolctl": "3.7.0",
+      "psutil": "7.2.2"
+    }
+  },
+  "threadpools": [
+    {
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "num_threads": 1,
+      "prefix": "libomp",
+      "filepath": "/Users/saanvi/Desktop/wesad_features.csv/.venv/lib/python3.14/site-packages/sklearn/.dylibs/libomp.dylib",
+      "version": null
+    }
+  ],
+  "input_kind": "stored_features",
+  "results": [
+    {
+      "mode": "cascade",
+      "scenario": "clean",
+      "count": 300,
+      "coverage": 0.95,
+      "escalation_fraction": 0.05,
+      "quality_ms": {
+        "mean": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "feature_ms": {
+        "mean": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "inference_ms": {
+        "mean": 1.277152369148098,
+        "p50": 1.2571459810715169,
+        "p95": 1.4163795101922005,
+        "p99": 1.5619463042821735
+      },
+      "total_ms": {
+        "mean": 1.3024673372274265,
+        "p50": 1.2815829832106829,
+        "p95": 1.444258342962712,
+        "p99": 1.5916580794146284
+      },
+      "cpu_ms": {
+        "mean": 1.30176666666667,
+        "p50": 1.2820000000000054,
+        "p95": 1.4443000000002204,
+        "p99": 1.5911299999998982
+      }
+    },
+    {
+      "mode": "ecg",
+      "scenario": "clean",
+      "count": 300,
+      "coverage": 1.0,
+      "escalation_fraction": 0.0,
+      "quality_ms": {
+        "mean": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "feature_ms": {
+        "mean": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "inference_ms": {
+        "mean": 1.2707648754197483,
+        "p50": 1.2524584890343249,
+        "p95": 1.3846396061126143,
+        "p99": 1.4644493797095492
+      },
+      "total_ms": {
+        "mean": 1.2944077079494793,
+        "p50": 1.2756244977936149,
+        "p95": 1.4126461639534682,
+        "p99": 1.4932300843065605
+      },
+      "cpu_ms": {
+        "mean": 1.2940233333333147,
+        "p50": 1.275499999999985,
+        "p95": 1.4033499999998256,
+        "p99": 1.4900499999999939
+      }
+    }
+  ],
+  "excludes": [
+    "file IO",
+    "window acquisition duration",
+    "sensor/radio energy"
+  ],
+  "note": "Process RSS includes Python and all loaded experts; this is host performance, not a battery-life estimate."
+}

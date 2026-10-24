@@ -1,0 +1,29 @@
+[
+  {
+    "method": "cascade",
+    "baseline_active_event_seconds": 1320.0,
+    "eligible_baseline_seconds": 16920.0,
+    "baseline_active_event_fraction": 0.07801418439716312,
+    "stress_episodes_with_any_active_event": 14,
+    "stress_episodes": 15,
+    "note": "WESAD has one stress block per participant. Any-active coverage includes events that began earlier; it is not onset detection."
+  },
+  {
+    "method": "cascade_single_window",
+    "baseline_active_event_seconds": 1740.0,
+    "eligible_baseline_seconds": 16920.0,
+    "baseline_active_event_fraction": 0.10283687943262411,
+    "stress_episodes_with_any_active_event": 14,
+    "stress_episodes": 15,
+    "note": "WESAD has one stress block per participant. Any-active coverage includes events that began earlier; it is not onset detection."
+  },
+  {
+    "method": "fusion",
+    "baseline_active_event_seconds": 480.0,
+    "eligible_baseline_seconds": 16920.0,
+    "baseline_active_event_fraction": 0.028368794326241134,
+    "stress_episodes_with_any_active_event": 13,
+    "stress_episodes": 15,
+    "note": "WESAD has one stress block per participant. Any-active coverage includes events that began earlier; it is not onset detection."
+  }
+]

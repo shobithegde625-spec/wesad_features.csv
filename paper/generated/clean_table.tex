@@ -1,0 +1,15 @@
+\begin{table*}[t]
+\centering\caption{Clean participant-held-out results on the same 434 eligible replay windows. All-window recall counts rejected stress as undetected. Accuracy, precision and F1 describe accepted windows; all listed v2 methods have full clean coverage. Baseline CPU was not instrumented and is left unreported.}
+\label{tab:clean}\small
+\begin{tabular}{lrrrrrrr}\toprule
+Method & Acc. (\%) & Bal. acc. (\%) & Prec. (\%) & Recall (\%) & F1 & Cov. (\%) & CPU (ms)\\\midrule
+Original ECG logistic & 72.35 & 71.90 & 58.79 & 70.39 & 0.641 & 100.0 & ---\\
+Original ECG SVM & 83.18 & 81.14 & 76.87 & 74.34 & 0.756 & 100.0 & ---\\
+Original ECG forest & 78.11 & 78.76 & 65.08 & 80.92 & 0.721 & 100.0 & ---\\
+Physiological ECG & 85.48 & 82.61 & 83.46 & 73.03 & 0.779 & 100.0 & 11.25\\
+Confidence-only cascade & 85.48 & 86.10 & 74.86 & 88.16 & 0.810 & 100.0 & 14.32\\
+\textbf{Quality-aware cascade} & 85.48 & 86.10 & 74.86 & 88.16 & 0.810 & 100.0 & 14.24\\
+Cascade without abstention & 85.48 & 86.10 & 74.86 & 88.16 & 0.810 & 100.0 & 14.23\\
+Always-on fusion & 88.71 & 88.73 & 80.84 & 88.82 & 0.846 & 100.0 & 16.77\\
+\bottomrule\end{tabular}
+\end{table*}

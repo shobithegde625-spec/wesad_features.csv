@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering\caption{All eleven waveform scenarios: quality-aware cascade compared with the same fold-specific, full-modality-required fusion expert. Acc. and F1 use accepted decisions; recall uses all stress windows. A dash indicates undefined classification quality when coverage is zero. Each scenario has 434 scored windows.}
+\label{tab:failures}\small
+\begin{tabular}{lrrrrrrrr}\toprule
+ & \multicolumn{4}{c}{Adaptive cascade} & \multicolumn{4}{c}{Always-on fusion}\\
+Scenario & Cov. (\%) & Acc. (\%) & Rec. (\%) & F1 & Cov. (\%) & Acc. (\%) & Rec. (\%) & F1\\\midrule
+Clean & 100.00 & 85.48 & 88.16 & 0.810 & 100.00 & 88.71 & 88.82 & 0.846\\
+ECG missing burst & 100.00 & 85.25 & 77.63 & 0.787 & 0.00 & --- & 0.00 & ---\\
+ECG flatline & 100.00 & 85.25 & 77.63 & 0.787 & 0.00 & --- & 0.00 & ---\\
+ECG clipping & 100.00 & 72.12 & 70.39 & 0.639 & 56.68 & 45.93 & 46.71 & 0.516\\
+Moderate ECG noise & 100.00 & 70.97 & 94.74 & 0.696 & 100.00 & 76.96 & 96.05 & 0.745\\
+Severe ECG noise & 100.00 & 85.25 & 77.63 & 0.787 & 0.00 & --- & 0.00 & ---\\
+ECG amplitude $\times3$ & 100.00 & 57.60 & 53.95 & 0.471 & 100.00 & 57.37 & 93.42 & 0.606\\
+EDA dropout & 100.00 & 85.48 & 73.03 & 0.779 & 0.00 & --- & 0.00 & ---\\
+Respiration dropout & 100.00 & 85.48 & 73.03 & 0.779 & 0.00 & --- & 0.00 & ---\\
+Both alternates dropped & 100.00 & 85.48 & 73.03 & 0.779 & 0.00 & --- & 0.00 & ---\\
+Total sensor dropout & 0.00 & --- & 0.00 & --- & 0.00 & --- & 0.00 & ---\\
+\bottomrule\end{tabular}
+\end{table*}

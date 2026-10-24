@@ -3,3 +3,18 @@ __pycache__/
 *.py[cod]
 .env
 .streamlit/secrets.toml
+
+.pytest_cache/
+.cache/
+**/.mplcache/
+data/
+artifacts/
+reports/**/models/
+reports/**/predictions.csv
+
+# Local OS metadata and temporary LaTeX build products.
+.DS_Store
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.synctex.gz

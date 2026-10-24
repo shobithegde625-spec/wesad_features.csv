@@ -1,0 +1,112 @@
+[
+  {
+    "fold": 1,
+    "outer_train_subjects": [
+      "S10",
+      "S11",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "S7",
+      "S8"
+    ],
+    "outer_test_subjects": [
+      "S17",
+      "S6",
+      "S9"
+    ]
+  },
+  {
+    "fold": 2,
+    "outer_train_subjects": [
+      "S11",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S2",
+      "S3",
+      "S4",
+      "S6",
+      "S8",
+      "S9"
+    ],
+    "outer_test_subjects": [
+      "S10",
+      "S5",
+      "S7"
+    ]
+  },
+  {
+    "fold": 3,
+    "outer_train_subjects": [
+      "S10",
+      "S11",
+      "S13",
+      "S15",
+      "S16",
+      "S17",
+      "S2",
+      "S3",
+      "S5",
+      "S6",
+      "S7",
+      "S9"
+    ],
+    "outer_test_subjects": [
+      "S14",
+      "S4",
+      "S8"
+    ]
+  },
+  {
+    "fold": 4,
+    "outer_train_subjects": [
+      "S10",
+      "S11",
+      "S14",
+      "S15",
+      "S17",
+      "S2",
+      "S4",
+      "S5",
+      "S6",
+      "S7",
+      "S8",
+      "S9"
+    ],
+    "outer_test_subjects": [
+      "S13",
+      "S16",
+      "S3"
+    ]
+  },
+  {
+    "fold": 5,
+    "outer_train_subjects": [
+      "S10",
+      "S13",
+      "S14",
+      "S16",
+      "S17",
+      "S3",
+      "S4",
+      "S5",
+      "S6",
+      "S7",
+      "S8",
+      "S9"
+    ],
+    "outer_test_subjects": [
+      "S11",
+      "S15",
+      "S2"
+    ]
+  }
+]

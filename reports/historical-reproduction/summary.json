@@ -1,0 +1,212 @@
+{
+  "protocol": "group5",
+  "seed": 42,
+  "dataset_sha256": "746609cfc4d39c6ff29aa202a7f10b0ef44f12f3901300d761581c8fdf2b42ef",
+  "subjects": 15,
+  "windows": 445,
+  "waveform_processing_measured": false,
+  "multimodal": false,
+  "environment": {
+    "python": "3.14.3 (main, Feb  3 2026, 15:32:20) [Clang 17.0.0 (clang-1700.6.3.2)]",
+    "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.0",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "joblib": "1.6.0",
+      "streamlit": "1.66.1",
+      "threadpoolctl": "3.7.0",
+      "psutil": "7.2.2"
+    }
+  },
+  "results": [
+    {
+      "method": "legacy_logistic",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 1.0,
+        "baseline_coverage": 1.0,
+        "stress_coverage": 1.0,
+        "all_window_stress_recall": 0.725,
+        "probability_coverage": 1.0,
+        "escalation_fraction": 0.0,
+        "accuracy": 0.7460674157303371,
+        "balanced_accuracy": 0.7414473684210526,
+        "stress_precision": 0.6270270270270271,
+        "stress_recall": 0.725,
+        "stress_f1": 0.672463768115942,
+        "selective_error": 0.2539325842696629,
+        "brier": 0.16741283214479058,
+        "log_loss": 0.5022151361899487,
+        "accepted_brier": 0.16741283214479058,
+        "accepted_log_loss": 0.5022151361899487,
+        "mean_total_ms": 1.8696734202983842,
+        "p95_total_ms": 2.125649608206004
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.737331206804891,
+          "lower_95": 0.5995558213716109,
+          "upper_95": 0.866295188729399,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.7167676767676767,
+          "lower_95": 0.5122828282828282,
+          "upper_95": 0.9016212121212122,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 1.0,
+          "lower_95": 1.0,
+          "upper_95": 1.0,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.6404586495259884,
+          "lower_95": 0.44744013555923096,
+          "upper_95": 0.8222413523952496,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.25452725250278085,
+          "lower_95": 0.125550241008528,
+          "upper_95": 0.3972767272277839,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    },
+    {
+      "method": "legacy_svm",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 1.0,
+        "baseline_coverage": 1.0,
+        "stress_coverage": 1.0,
+        "all_window_stress_recall": 0.7375,
+        "probability_coverage": 0.0,
+        "escalation_fraction": 0.0,
+        "accuracy": 0.8247191011235955,
+        "balanced_accuracy": 0.8055921052631579,
+        "stress_precision": 0.7662337662337663,
+        "stress_recall": 0.7375,
+        "stress_f1": 0.7515923566878981,
+        "selective_error": 0.1752808988764045,
+        "brier": null,
+        "log_loss": null,
+        "accepted_brier": null,
+        "accepted_log_loss": null,
+        "mean_total_ms": 1.0124018674800068,
+        "p95_total_ms": 1.1762746493332088
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.8019936204146731,
+          "lower_95": 0.682951754385965,
+          "upper_95": 0.9020913078149919,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.7303030303030303,
+          "lower_95": 0.5278484848484849,
+          "upper_95": 0.9006060606060606,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 1.0,
+          "lower_95": 1.0,
+          "upper_95": 1.0,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.706839361149706,
+          "lower_95": 0.507666194756712,
+          "upper_95": 0.8806972864300451,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.17440365838586083,
+          "lower_95": 0.0753256704980843,
+          "upper_95": 0.274046224199728,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    },
+    {
+      "method": "legacy_historical_forest",
+      "scenario": "clean",
+      "pooled": {
+        "windows": 445,
+        "coverage": 1.0,
+        "baseline_coverage": 1.0,
+        "stress_coverage": 1.0,
+        "all_window_stress_recall": 0.80625,
+        "probability_coverage": 1.0,
+        "escalation_fraction": 0.0,
+        "accuracy": 0.7752808988764045,
+        "balanced_accuracy": 0.7820723684210527,
+        "stress_precision": 0.6515151515151515,
+        "stress_recall": 0.80625,
+        "stress_f1": 0.7206703910614525,
+        "selective_error": 0.2247191011235955,
+        "brier": 0.16168314606741574,
+        "log_loss": 0.48901433106799524,
+        "accepted_brier": 0.16168314606741574,
+        "accepted_log_loss": 0.48901433106799524,
+        "mean_total_ms": 21.563953542924914,
+        "p95_total_ms": 22.72345059318468
+      },
+      "participant_macro_intervals": {
+        "balanced_accuracy": {
+          "mean": 0.7804625199362042,
+          "lower_95": 0.6746064593301436,
+          "upper_95": 0.8761447368421054,
+          "subjects": 15
+        },
+        "all_window_stress_recall": {
+          "mean": 0.8030303030303031,
+          "lower_95": 0.6163636363636364,
+          "upper_95": 0.9563636363636364,
+          "subjects": 15
+        },
+        "coverage": {
+          "mean": 1.0,
+          "lower_95": 1.0,
+          "upper_95": 1.0,
+          "subjects": 15
+        },
+        "stress_f1": {
+          "mean": 0.6898252607634758,
+          "lower_95": 0.5154991681765136,
+          "upper_95": 0.840185763046175,
+          "subjects": 15
+        },
+        "selective_error": {
+          "mean": 0.22540847855642068,
+          "lower_95": 0.11913409961685825,
+          "upper_95": 0.3283867259918427,
+          "subjects": 15
+        }
+      },
+      "events": {
+        "status": "unavailable_without_source_timestamps"
+      }
+    }
+  ],
+  "selection_rule": "inner grouped model selection, disjoint sigmoid calibration, policy-subject threshold search",
+  "limitations": [
+    "15-person laboratory data does not establish real-world alert rates",
+    "Stored-feature timings exclude feature extraction",
+    "Outer-fold estimates assess the training procedure, not the final deployment artifact"
+  ]
+}

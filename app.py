@@ -1,416 +1,292 @@
-from __future__ import annotations
-
+"""Pulsepoint: local prerecorded monitoring with shared quality-aware runtime."""
 from datetime import datetime
 from pathlib import Path
-from time import perf_counter
+import json
+import uuid
 
-import joblib
 import numpy as np
 import pandas as pd
 import streamlit as st
 
+from pulsepoint.data import BASE_DIR, RawSource, load_dataset, file_hash
+from pulsepoint.replay import Runtime, chronological, source_interval
+from pulsepoint.training import load_bundle
+from pulsepoint.corruption import SCENARIOS, corrupt
 
-BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "stress_detection_model.joblib"
-DATA_PATH = BASE_DIR / "wesad_features.csv"
-COMPARISON_PATH = BASE_DIR / "model_comparison.csv"
-EXPECTED_FEATURES = ["mean", "std", "minimum", "maximum", "median", "skewness", "kurtosis"]
-LABEL_NAMES = {0: "Baseline", 1: "Stress"}
-COMPARISON_METRICS = {
-    "Accuracy": "Accuracy",
-    "Balanced accuracy": "Balanced Accuracy",
-    "Stress precision": "Stress Precision",
-    "Stress recall": "Stress Recall",
-    "Stress F1": "Stress F1",
-}
-
-st.set_page_config(
-    page_title="Pulsepoint | Stress Monitor",
-    page_icon="✳",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-
-st.markdown("""
-<style>
-:root { --ink:#183345; --muted:#6d8290; --teal:#177b76; --line:#e5edef; }
-.stApp { background:#f4f8f8; color:var(--ink); font-family:Arial,sans-serif; }
-[data-testid="stSidebar"] { background:#102d3b; }
-[data-testid="stSidebar"] * { color:#eaf4f3 !important; }
-[data-testid="stSidebar"] [data-testid="stRadio"] label { padding:8px 10px; border-radius:9px; }
-h1,h2,h3 { color:var(--ink); font-family:Arial,sans-serif !important; }
-.hero { background:linear-gradient(115deg,#123745,#167873); padding:28px 32px; border-radius:19px; color:white; margin:4px 0 20px; }
-.hero h1 { color:white; font-size:30px; margin:0 0 6px; }
-.hero p { color:#c8e3df; margin:0; font-size:14px; }
-.eyebrow { text-transform:uppercase; letter-spacing:.15em; color:#b7ddd7; font-size:10px; font-weight:700; margin-bottom:9px; }
-.metric-card { background:white; border:1px solid var(--line); border-radius:15px; padding:17px 19px; min-height:112px; box-shadow:0 4px 18px #163b4810; }
-.metric-label { color:var(--muted); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
-.metric-value { color:var(--ink); font-size:27px; font-weight:800; margin-top:12px; }
-.metric-note { color:var(--muted); font-size:12px; margin-top:3px; }
-.panel { background:white; padding:20px 22px; border:1px solid var(--line); border-radius:15px; margin:13px 0; }
-.small-note { color:#718292; font-size:13px; }
-.stButton button, .stDownloadButton button { border-radius:10px; font-weight:700; }
-div[data-testid="stAlert"] { border-radius:12px; }
-</style>
-""", unsafe_allow_html=True)
-
-
-def card(label: str, value: str, note: str = "") -> None:
-    st.markdown(
-        f'<div class="metric-card"><div class="metric-label">{label}</div>'
-        f'<div class="metric-value">{value}</div><div class="metric-note">{note}</div></div>',
-        unsafe_allow_html=True,
-    )
-
-
-def show_hero(eyebrow: str, title: str, subtitle: str) -> None:
-    st.markdown(
-        f'<div class="hero"><div class="eyebrow">{eyebrow}</div>'
-        f'<h1>{title}</h1><p>{subtitle}</p></div>',
-        unsafe_allow_html=True,
-    )
+st.set_page_config(page_title="Pulsepoint | Stress Monitor", page_icon="✳", layout="wide")
+st.markdown("""<style>
+.stApp {background:#f4f8f8;color:#183345;font-family:Arial,sans-serif}
+[data-testid="stSidebar"] {background:#102d3b}
+[data-testid="stSidebar"] * {color:#eaf4f3}
+.hero {background:linear-gradient(115deg,#123745,#167873);padding:26px 30px;border-radius:18px;color:white;margin-bottom:20px}
+.hero h1 {color:white;margin:0;font-size:30px}.hero p {color:#c8e3df;margin-bottom:0}
+.stButton button,.stDownloadButton button {border-radius:10px}
+</style>""", unsafe_allow_html=True)
 
 
 @st.cache_resource
-def load_model():
-    if not MODEL_PATH.exists():
-        raise FileNotFoundError(f"Saved model not found: {MODEL_PATH.name}")
-    saved = joblib.load(MODEL_PATH)
-    if isinstance(saved, dict):
-        model = saved.get("model")
-        features = saved.get("features", EXPECTED_FEATURES)
-    else:
-        model, features = saved, EXPECTED_FEATURES
-    if model is None or not callable(getattr(model, "predict", None)):
-        raise ValueError("The saved model bundle does not contain a usable estimator.")
-    return model, list(features)
+def cached_bundle(path, mtime):
+    return load_bundle(path)
 
 
 @st.cache_data
-def load_dataset() -> pd.DataFrame:
-    if not DATA_PATH.exists():
-        raise FileNotFoundError(f"Feature dataset not found: {DATA_PATH.name}")
-    return pd.read_csv(DATA_PATH)
+def cached_data(path, mtime):
+    return load_dataset(path, min_subjects=1)
 
 
-@st.cache_data
-def load_comparison() -> pd.DataFrame | None:
-    if not COMPARISON_PATH.exists():
-        return None
-    return pd.read_csv(COMPARISON_PATH)
+@st.cache_resource
+def raw_source(path):
+    return RawSource(path)
 
 
-def prepare_samples(data: pd.DataFrame, features: list[str]) -> pd.DataFrame:
-    missing = [name for name in features if name not in data.columns]
-    if missing:
-        raise ValueError("Feature CSV is missing model inputs: " + ", ".join(missing))
-    samples = data.copy()
-    samples[features] = samples[features].apply(pd.to_numeric, errors="coerce")
-    samples = samples.replace([np.inf, -np.inf], np.nan)
-    samples = samples.dropna(subset=features).reset_index(names="source_row")
-    if "label" in samples:
-        samples["label"] = pd.to_numeric(samples["label"], errors="coerce")
-    return samples
+def hero(title, subtitle):
+    st.markdown(f'<div class="hero"><h1>{title}</h1><p>{subtitle}</p></div>', unsafe_allow_html=True)
 
 
-def predict(model, features: list[str], row: pd.DataFrame):
-    sample = row[features]
-    started = perf_counter()
-    prediction = int(model.predict(sample)[0])
-    probabilities: dict[int, float] = {}
-    if callable(getattr(model, "predict_proba", None)):
-        scores = model.predict_proba(sample)[0]
-        for class_id, score in zip(model.classes_, scores):
-            probabilities[int(class_id)] = float(score)
-    elapsed_ms = (perf_counter() - started) * 1000
-    return prediction, probabilities, elapsed_ms
-
-
-def record_prediction(row: pd.DataFrame, prediction: int, probabilities: dict[int, float], latency_ms: float, source: str) -> dict:
-    sample = row.iloc[0]
-    timestamp = datetime.now().astimezone()
-    entry = {
-        "timestamp": timestamp.isoformat(timespec="seconds"),
-        "source_row": int(sample["source_row"]) + 1,
-        "source": source,
-        "condition": LABEL_NAMES.get(prediction, f"Class {prediction}"),
-        "baseline_probability": probabilities.get(0),
-        "stress_probability": probabilities.get(1),
-        "latency_ms": float(latency_ms),
-    }
-    if "label" in sample and pd.notna(sample["label"]):
-        entry["known_label"] = LABEL_NAMES.get(int(sample["label"]), str(int(sample["label"])))
-    else:
-        entry["known_label"] = "Unavailable"
-    st.session_state.prediction_history.append(entry)
-    st.session_state.latest_prediction = entry
-    return entry
-
-
-def show_alert(probability: float | None, threshold: float) -> None:
-    if probability is None:
-        st.info("Class probabilities are unavailable for this saved estimator.")
-    elif probability >= threshold:
-        st.warning(
-            f"Demonstration alert: stress probability ({probability:.1%}) meets or exceeds "
-            f"your {threshold:.0%} threshold. This is a model demo alert, not a medical warning."
-        )
-
-
-def show_prediction(entry: dict, threshold: float) -> None:
-    condition = entry["condition"]
-    if condition == "Stress":
+def show_result(entry):
+    if not entry["accepted"]:
+        st.warning("Insufficient evidence — " + entry["reason"].replace("_", " "))
+    elif entry["prediction"] == 1:
         st.error("Stress pattern predicted")
-    elif condition == "Baseline":
-        st.success("Baseline pattern predicted")
     else:
-        st.info(f"Predicted condition: {condition}")
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        value = entry["baseline_probability"]
-        card("Baseline probability", f"{value:.1%}" if value is not None else "Unavailable", "Model output for this sample")
-    with c2:
-        value = entry["stress_probability"]
-        card("Stress probability", f"{value:.1%}" if value is not None else "Unavailable", "Model output for this sample")
-    with c3:
-        card("Inference latency", f"{entry['latency_ms']:.3f} ms", "Measured on this computer")
-    show_alert(entry["stress_probability"], threshold)
+        st.success("Baseline pattern predicted")
+    columns = st.columns(3)
+    p = entry["stress_probability"]
+    columns[0].metric("Stress probability", f"{p:.1%}" if p is not None else "Unavailable")
+    columns[1].metric("Processing time", f"{entry['total_ms']:.2f} ms")
+    columns[2].metric("Event state", entry["event_state"].replace("_", " ").title())
+    st.caption(f"Evidence: {entry['route']} · source row {entry['source_row']} · {entry['subject']} · {entry['timestamp']}")
+    if entry["event_opened"]:
+        st.warning("Sustained stress pattern detected in this prerecorded demonstration.")
+    reasons = {name: q["reason"] for name, q in entry["quality"].items()}
+    with st.expander("Signal quality and processing details"):
+        st.json({"quality": reasons, "quality_ms": entry["quality_ms"], "feature_ms": entry["feature_ms"],
+                 "inference_ms": entry["inference_ms"], "input_kind": entry["input_kind"],
+                 "source_interval": entry.get("source_interval"), "artifact_id": entry["artifact_id"]})
 
 
-def clear_session() -> None:
-    st.session_state.monitor_running = False
-    st.session_state.monitor_cursor = 0
-    st.session_state.monitor_last = None
-    st.session_state.prediction_history = []
-    st.session_state.latest_prediction = None
-
-
-for key, initial in {
-    "prediction_history": [],
-    "latest_prediction": None,
-    "monitor_running": False,
-    "monitor_cursor": 0,
-    "monitor_last": None,
-    "alert_threshold": 0.70,
-}.items():
+for key, value in {"history": [], "cursor": 0, "running": False, "latest": None, "runtime": None,
+                   "context": None, "replay_id": None}.items():
     if key not in st.session_state:
-        st.session_state[key] = initial
+        st.session_state[key] = value
 
 with st.sidebar:
     st.markdown("## ✳ Pulsepoint")
-    st.caption("EDGE HEALTH  /  WESAD")
-    st.divider()
-    page = st.radio(
-        "Workspace",
-        ["Overview", "Prediction", "Monitoring", "History", "Analysis", "Performance"],
-        label_visibility="collapsed",
-    )
-    st.divider()
-    st.markdown("**DEMO ALERT THRESHOLD**")
-    threshold_pct = st.slider(
-        "Stress probability threshold",
-        min_value=50,
-        max_value=95,
-        value=int(round(st.session_state.alert_threshold * 100)),
-        step=5,
-        format="%d%%",
-        label_visibility="collapsed",
-        key="alert_threshold_slider",
-    )
-    st.session_state.alert_threshold = threshold_pct / 100
-    st.caption("Alerts are demonstrations, not medical warnings.")
-    st.divider()
-    st.markdown("**INFERENCE**")
-    st.markdown("🟢 Local model")
-    st.caption("Prediction runs on this computer. No sensor data is uploaded.")
+    st.caption("LOCAL STRESS MONITORING")
+    page = st.radio("Workspace", ["Overview", "Prediction", "Monitoring", "History", "Analysis", "Performance"])
+    artifacts = sorted((p for p in BASE_DIR.glob("artifacts/*/model.joblib") if p.with_name("metadata.json").exists()),
+                       key=lambda p: p.stat().st_mtime, reverse=True)
+    if not artifacts:
+        st.info("Train a local model to begin.")
+        st.code("python train_model.py")
+        st.stop()
+    chosen_bundle = st.selectbox("Model", artifacts, format_func=lambda p: p.parent.name)
+    try:
+        bundle = cached_bundle(str(chosen_bundle), chosen_bundle.stat().st_mtime_ns)
+    except Exception as exc:
+        st.error(f"Could not load this model: {exc}")
+        st.stop()
+    default_data = bundle.get("dataset_path", str(BASE_DIR / "wesad_features.csv"))
+    replay_path = Path(default_data).with_name("replay.csv")
+    if bundle["multimodal"] and replay_path.exists():
+        default_data = str(replay_path)
+    default_raw = ""
+    dataset_metadata = Path(default_data).parent / "dataset.json"
+    if bundle["multimodal"] and dataset_metadata.exists():
+        configured_raw = json.loads(dataset_metadata.read_text()).get("raw_root", "")
+        if configured_raw and Path(configured_raw).exists():
+            default_raw = configured_raw
+    data_path_text = st.text_input("Feature or replay CSV", value=default_data)
+    raw_root_text = st.text_input("Raw WESAD folder or ZIP (optional)", value=default_raw,
+                                 help="Required for waveform replay and corruption demos. A ZIP avoids extracting the full recordings.")
+    mode = st.selectbox("Inference policy", ["cascade", "ecg"] + (["fusion", "confidence_only", "no_abstention"] if bundle["multimodal"] else ["no_abstention"]))
+    scenario = st.selectbox("Waveform scenario", list(SCENARIOS), disabled=not bool(raw_root_text.strip()))
+    st.caption("Prerecorded research demonstration. Predictions are not medical diagnoses.")
 
 try:
-    model, features = load_model()
-    raw_dataset = load_dataset()
-    samples = prepare_samples(raw_dataset, features)
+    data_path = Path(data_path_text).expanduser().resolve()
+    samples = cached_data(str(data_path), data_path.stat().st_mtime_ns)
+    expected = bundle["experts"]["ecg"].features
+    missing = set(expected) - set(samples)
+    if missing:
+        raise ValueError("Dataset lacks inputs for this model: " + ", ".join(sorted(missing)))
+    source = raw_source(raw_root_text.strip()) if raw_root_text.strip() else None
+    if source and not {"source_file", "sampling_rate", "start_sample", "end_sample"}.issubset(samples):
+        raise ValueError("Waveform replay requires metadata from prepare_dataset.py")
+    if not source:
+        scenario = "clean"
 except Exception as exc:
-    st.error(f"Dashboard could not load a required project artifact: {exc}")
-    st.info("Keep app.py beside stress_detection_model.joblib and wesad_features.csv.")
+    st.error(f"Could not load the selected data source: {exc}")
     st.stop()
 
-if samples.empty:
-    st.error("The feature CSV has no complete, finite rows that can be sent to the saved model.")
-    st.stop()
+with st.sidebar:
+    subject = st.selectbox("Participant", sorted(samples.subject.unique()))
+    selected = samples[samples.subject == subject]
+    session = None
+    if "session" in selected:
+        session = st.selectbox("Recording", sorted(selected.session.astype(str).unique()))
+        selected = selected[selected.session.astype(str) == session]
+    selected = chronological(selected).copy()
+    st.caption(f"{len(selected)} stored windows · processing stays on this computer")
 
-threshold = st.session_state.alert_threshold
+context = (str(chosen_bundle), chosen_bundle.stat().st_mtime_ns, str(data_path), data_path.stat().st_mtime_ns,
+           raw_root_text, subject, session, mode, scenario)
+if st.session_state.context != context:
+    st.session_state.update(context=context, cursor=0, running=False, latest=None,
+                            runtime=Runtime(bundle, mode), replay_id=uuid.uuid4().hex[:8])
+
+
+def process_row(row, source_kind, runtime):
+    interval = source_interval(row) if source_kind == "Replay" else None
+    if source:
+        signals, rate = source.window(row)
+        result = runtime.predict(signals=corrupt(signals, scenario, row["row_id"]), rate=rate, interval=interval)
+    else:
+        # Only the declared model features and quality fields are consumed by the runtime.
+        result = runtime.predict(features=row, interval=interval)
+    entry = {**result, "timestamp": datetime.now().astimezone().isoformat(timespec="seconds"),
+             "source_row": str(row["row_id"]), "subject": row["subject"], "session": row.get("session"),
+             "source": source_kind, "scenario": scenario, "source_interval": interval,
+             "replay_id": st.session_state.replay_id, "known_label": row.get("label"),
+             "start_seconds": row.get("start_seconds"), "end_seconds": row.get("end_seconds")}
+    st.session_state.history.append(entry)
+    st.session_state.latest = entry
+    return entry
+
 
 if page == "Overview":
-    show_hero("EDGE-BASED HEALTHCARE MONITORING", "Stress detection workspace", "Explore local model predictions and prerecorded WESAD demonstrations.")
-    st.info("WESAD data is prerecorded. This dashboard has no live wearable connection.")
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        card("Usable feature windows", f"{len(samples):,}", "Complete rows from wesad_features.csv")
-    with c2:
-        card("Session predictions", f"{len(st.session_state.prediction_history):,}", "Stored in this browser session")
-    with c3:
-        state = "Monitoring" if st.session_state.monitor_running else "Standby"
-        card("Simulation state", state, "Prerecorded sample playback")
-    if st.session_state.latest_prediction:
-        st.markdown("### Most recent prediction")
-        st.caption(f"{st.session_state.latest_prediction['timestamp']} · source row {st.session_state.latest_prediction['source_row']}")
-        show_prediction(st.session_state.latest_prediction, threshold)
-    st.markdown('<div class="panel"><h3>Start here</h3><p class="small-note">Choose Prediction to run one selected feature row. Monitoring steps through stored WESAD rows on a timer. Every result is retained in History until you reset the session.</p></div>', unsafe_allow_html=True)
+    hero("Stress detection workspace", "Quality-aware local inference and prerecorded monitoring")
+    st.info("This workspace uses stored WESAD data. There is no live wearable connection.")
+    cols = st.columns(3)
+    cols[0].metric("Dataset windows", len(samples))
+    cols[1].metric("Participants", samples.subject.nunique())
+    cols[2].metric("Session predictions", len(st.session_state.history))
+    if not bundle["multimodal"]:
+        st.info("This model uses the original ECG summaries. Multimodal routing requires a model trained on regenerated waveform features.")
+    if not source:
+        st.caption("Stored-feature mode: processing time excludes waveform feature extraction. Original summary rows have no verified signal-quality annotations.")
+    if "start_seconds" not in samples:
+        st.caption("This CSV has no source timestamps. Sustained event detection is unavailable.")
+    if st.session_state.latest:
+        show_result(st.session_state.latest)
 
 elif page == "Prediction":
-    show_hero("LOCAL MODEL INFERENCE", "Run a prediction", "Choose an existing feature window, then explicitly run it through the saved model.")
-    st.info("Dataset-based demonstration only. The selected row is not a live wearable measurement.")
-    sample_options = samples["source_row"].astype(int).tolist()
-    def sample_label(source_row: int) -> str:
-        item = samples.loc[samples["source_row"] == source_row].iloc[0]
-        details = [f"Row {int(source_row) + 1}"]
-        if "subject" in samples.columns:
-            details.append(str(item["subject"]))
-        if "label" in samples.columns and pd.notna(item["label"]):
-            details.append(f"known {LABEL_NAMES.get(int(item['label']), int(item['label']))}")
-        return " · ".join(details)
-
-    chosen_row = st.selectbox("WESAD sample", sample_options, format_func=sample_label)
-    sample_row = samples[samples["source_row"] == chosen_row].iloc[[0]]
-    with st.expander("Inspect stored model features", expanded=False):
-        st.dataframe(sample_row[features].T.rename(columns={sample_row.index[0]: "Value"}), use_container_width=True)
-    if st.button("Run Prediction", type="primary", use_container_width=True):
+    hero("Run a prediction", "Select a stored window; manual predictions do not accumulate event evidence")
+    positions = list(range(len(selected)))
+    position = st.selectbox("Window", positions, format_func=lambda i: f"{subject} · row {selected.iloc[i]['row_id']}")
+    row = selected.iloc[position].to_dict()
+    with st.expander("Inspect stored features"):
+        st.dataframe(pd.Series({f: row.get(f) for f in expected}, name="Value"))
+    if st.button("Run Prediction", type="primary"):
         try:
-            prediction, probabilities, latency = predict(model, features, sample_row)
-            record_prediction(sample_row, prediction, probabilities, latency, "Manual")
+            process_row(row, "Manual", Runtime(bundle, mode))
         except Exception as exc:
-            st.error(f"Prediction failed for this row: {exc}")
-    latest = st.session_state.latest_prediction
-    if latest:
-        st.markdown("### Latest result")
-        st.caption(f"Sample row {latest['source_row']} · {latest['timestamp']} · {latest['source']} prediction")
-        show_prediction(latest, threshold)
+            st.error(f"Prediction failed: {exc}")
+    if st.session_state.latest:
+        show_result(st.session_state.latest)
 
 elif page == "Monitoring":
-    show_hero("PRERECORDED-DATA SIMULATION", "Monitoring demo", "A timed replay of stored WESAD feature windows, processed by the local model.")
-    st.warning("Simulation only: these are prerecorded dataset rows, not a live wearable connection or live physiological measurements.")
-    interval = st.select_slider("Sample interval", options=[1, 2, 3, 5, 10], value=2, format_func=lambda value: f"{value} sec")
-    start_col, stop_col, reset_col = st.columns([1, 1, 1])
-    with start_col:
-        if st.button("▶  Start Monitoring", type="primary", disabled=st.session_state.monitor_running, use_container_width=True):
-            st.session_state.monitor_running = True
-            st.session_state.monitor_cursor = 1
-            row = samples.iloc[[0]]
-            prediction, probabilities, latency = predict(model, features, row)
-            st.session_state.monitor_last = record_prediction(row, prediction, probabilities, latency, "Simulation")
-            st.rerun()
-    with stop_col:
-        if st.button("■  Stop Monitoring", disabled=not st.session_state.monitor_running, use_container_width=True):
-            st.session_state.monitor_running = False
-            st.rerun()
-    with reset_col:
-        if st.button("↺  Reset Session", use_container_width=True):
-            clear_session()
-            st.rerun()
+    hero("Monitoring replay", "Source-time event decisions from one participant and recording")
+    st.info("Playback speed controls the display only. Physiological intervals come from recording metadata.")
+    if not source:
+        st.caption("Stored-feature replay; waveform processing costs are excluded.")
+    interval = st.select_slider("Playback interval (seconds)", [1, 2, 3, 5, 10], value=2)
+    columns = st.columns(3)
+    if columns[0].button("Start / Resume", type="primary", disabled=st.session_state.running):
+        if st.session_state.cursor >= len(selected):
+            st.session_state.cursor = 0
+            st.session_state.runtime.reset()
+            st.session_state.replay_id = uuid.uuid4().hex[:8]
+        st.session_state.running = True
+        st.rerun()
+    if columns[1].button("Stop", disabled=not st.session_state.running):
+        st.session_state.running = False
+        st.rerun()
+    if columns[2].button("Restart recording"):
+        st.session_state.update(cursor=0, running=False, latest=None, replay_id=uuid.uuid4().hex[:8])
+        st.session_state.runtime.reset()
+        st.rerun()
 
-    @st.fragment(run_every=interval if st.session_state.monitor_running else None)
+    @st.fragment(run_every=interval if st.session_state.running else None)
     def monitoring_panel():
-        if st.session_state.monitor_running:
-            next_sample_index = st.session_state.monitor_cursor % len(samples)
-            row = samples.iloc[[next_sample_index]]
-            prediction, probabilities, latency = predict(model, features, row)
-            st.session_state.monitor_last = record_prediction(row, prediction, probabilities, latency, "Simulation")
-            st.session_state.monitor_cursor = next_sample_index + 1
-        latest = st.session_state.monitor_last
-        status = "RUNNING · prerecorded replay" if st.session_state.monitor_running else "STOPPED · prerecorded replay"
-        st.markdown(f"**Status:** {status}")
-        if latest is None:
-            st.caption("Press Start Monitoring to begin processing stored samples.")
-            return
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            card("Current prediction", latest["condition"], f"Source row {latest['source_row']}")
-        with c2:
-            score = latest["stress_probability"]
-            card("Stress probability", f"{score:.1%}" if score is not None else "Unavailable", "Saved model output")
-        with c3:
-            card("Last processed", latest["timestamp"], f"Inference {latest['latency_ms']:.3f} ms")
-        show_alert(latest["stress_probability"], threshold)
-        chart_history = [item for item in st.session_state.prediction_history if item["source"] == "Simulation" and item["stress_probability"] is not None]
-        if chart_history:
-            trend = pd.DataFrame(chart_history)
-            trend["timestamp"] = pd.to_datetime(trend["timestamp"])
-            trend = trend.set_index("timestamp")[["stress_probability"]].rename(columns={"stress_probability": "Stress probability"})
-            st.markdown("#### Stress score trend")
-            st.line_chart(trend, height=260)
-            st.caption("Each point represents one prediction from a prerecorded WESAD row.")
-
+        if st.session_state.running:
+            if st.session_state.cursor < len(selected):
+                row = selected.iloc[st.session_state.cursor].to_dict()
+                try:
+                    process_row(row, "Replay", st.session_state.runtime)
+                    st.session_state.cursor += 1
+                except Exception as exc:
+                    st.session_state.running = False
+                    st.error(f"Replay stopped: {exc}")
+            if st.session_state.cursor >= len(selected):
+                st.session_state.running = False
+                # Refresh the surrounding controls as well as the fragment.
+                st.rerun()
+        st.progress(min(st.session_state.cursor/len(selected), 1.0))
+        if st.session_state.cursor >= len(selected):
+            st.success("Recording complete. Start again to begin a new replay.")
+        else:
+            st.caption("Running" if st.session_state.running else "Stopped")
+        if st.session_state.latest:
+            show_result(st.session_state.latest)
+        history = [r for r in st.session_state.history if r["source"] == "Replay" and r["replay_id"] == st.session_state.replay_id]
+        if history:
+            chart = pd.DataFrame(history)
+            index = "end_seconds" if chart.end_seconds.notna().all() else "source_row"
+            st.line_chart(chart.set_index(index)[["stress_probability"]], height=260)
     monitoring_panel()
 
 elif page == "History":
-    show_hero("CURRENT SESSION", "Prediction history", "Review, filter, and export results created during this app session.")
-    history = st.session_state.prediction_history
-    st.caption("Rows are stored in Streamlit session state and are cleared with Reset Session or when the session ends.")
-    if not history:
-        st.info("No predictions yet. Run a selected sample or start the monitoring simulation to add history.")
+    hero("Prediction history", "Results from this browser session, including rejected decisions")
+    if not st.session_state.history:
+        st.info("Run a prediction or monitoring replay to add results.")
     else:
-        condition_filter = st.selectbox("Filter by predicted condition", ["All conditions", "Baseline", "Stress"])
-        history_df = pd.DataFrame(history)
-        if condition_filter != "All conditions":
-            history_df = history_df[history_df["condition"] == condition_filter]
-        st.dataframe(history_df, use_container_width=True, hide_index=True)
-        csv_bytes = history_df.to_csv(index=False).encode("utf-8")
-        st.download_button("Download CSV", data=csv_bytes, file_name="stress_prediction_history.csv", mime="text/csv", type="primary")
-        st.caption(f"Showing {len(history_df)} of {len(history)} session predictions.")
-        if st.button("Reset Session", help="Stops monitoring and clears this session’s prediction history."):
-            clear_session()
+        history = pd.DataFrame(st.session_state.history)
+        history["quality"] = history.quality.map(json.dumps)
+        history["source_interval"] = history.source_interval.map(json.dumps)
+        st.dataframe(history, hide_index=True)
+        st.download_button("Download CSV", history.to_csv(index=False).encode(), "stress_prediction_history.csv", "text/csv")
+        if st.button("Clear session history"):
+            st.session_state.update(history=[], latest=None, running=False, cursor=0, replay_id=uuid.uuid4().hex[:8])
+            st.session_state.runtime.reset()
             st.rerun()
 
 elif page == "Analysis":
-    show_hero("SAVED EVALUATION RESULTS", "Interactive model analysis", "Choose a saved metric to compare the three models evaluated by your project.")
-    try:
-        comparison = load_comparison()
-    except Exception as exc:
-        comparison = None
-        st.error(f"Could not read model_comparison.csv: {exc}")
-    if comparison is None or comparison.empty:
-        st.warning("model_comparison.csv is missing or empty. Run compare_models.py to create it.")
-    elif "Model" not in comparison:
-        st.error("Comparison results need a Model column.")
+    hero("Evaluation analysis", "Participant-held-out estimates with coverage and operational recall")
+    reports = sorted(BASE_DIR.glob("reports/*/summary.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    matching = [p for p in reports if json.loads(p.read_text()).get("dataset_sha256") == bundle.get("dataset_sha256")]
+    if not matching:
+        st.info("No evaluation report for this model's training dataset. Run evaluate.py to produce one.")
     else:
-        valid_metrics = {label: column for label, column in COMPARISON_METRICS.items() if column in comparison.columns}
-        if not valid_metrics:
-            st.error("No supported saved metric columns were found in model_comparison.csv.")
-        else:
-            metric_label = st.selectbox("Metric to compare", list(valid_metrics))
-            metric_column = valid_metrics[metric_label]
-            chart_data = comparison[["Model", metric_column]].copy()
-            chart_data[metric_column] = pd.to_numeric(chart_data[metric_column], errors="coerce")
-            chart_data = chart_data.dropna(subset=[metric_column]).set_index("Model")
-            if chart_data.empty:
-                st.warning(f"The saved {metric_label.lower()} values are not numeric.")
-            else:
-                st.caption(f"Showing actual values saved in model_comparison.csv · {metric_label}")
-                st.bar_chart(chart_data, y=metric_column, y_label="Score", x_label="Model", height=360)
-                st.dataframe(chart_data.rename(columns={metric_column: metric_label}).style.format("{:.1%}"), use_container_width=True)
+        report_path = st.selectbox("Evaluation run", matching, format_func=lambda p: p.parent.name)
+        report = json.loads(report_path.read_text())
+        st.caption(f"Protocol: {report['protocol']} · {report['subjects']} participants. These folds evaluate the training procedure, not this specific fitted deployment model.")
+        comparison = pd.read_csv(report_path.parent / "comparison.csv")
+        st.dataframe(comparison, hide_index=True)
+        clean = comparison[comparison.scenario == "clean"].set_index("method")
+        metric = st.selectbox("Metric", ["coverage", "all_window_stress_recall", "stress_f1", "mean_total_ms"])
+        st.bar_chart(clean[[metric]])
+        if (report_path.parent / "evaluation.png").exists():
+            st.image(str(report_path.parent / "evaluation.png"))
+    with st.expander("Historical comparison from the original project"):
+        historical = BASE_DIR / "model_comparison.csv"
+        if historical.exists():
+            st.caption("Historical results use different estimator settings and do not describe the selected model.")
+            st.dataframe(pd.read_csv(historical), hide_index=True)
 
 elif page == "Performance":
-    show_hero("MODEL HEALTH", "Performance", "Saved subject-wise results and device-measured edge footprint.")
-    try:
-        comparison = load_comparison()
-    except Exception as exc:
-        comparison = None
-        st.error(f"Could not read model_comparison.csv: {exc}")
-    if comparison is None or comparison.empty:
-        st.info("Saved evaluation metrics are unavailable because model_comparison.csv is missing or empty.")
-    else:
-        st.caption("Accuracy, balanced accuracy, stress precision, stress recall, and stress F1 are read from your saved subject-wise comparison results.")
-        st.dataframe(comparison.style.format({column: "{:.1%}" for column in COMPARISON_METRICS.values() if column in comparison.columns}), use_container_width=True, hide_index=True)
-    size_bytes = MODEL_PATH.stat().st_size if MODEL_PATH.exists() else None
+    hero("Model performance", "Artifact provenance and measured processing footprint")
     a, b = st.columns(2)
-    with a:
-        card("Saved model size", f"{size_bytes / 1024:.1f} KB" if size_bytes is not None else "Unavailable", "Measured from stress_detection_model.joblib")
-    with b:
-        if st.button("Measure local inference latency", type="primary", use_container_width=True):
-            try:
-                _, _, elapsed = predict(model, features, samples.iloc[[0]])
-                st.metric("Single-row latency", f"{elapsed:.3f} ms")
-                st.caption("Measured on this computer for one prediction and probability calculation.")
-            except Exception as exc:
-                st.error(f"Could not measure local inference: {exc}")
-        else:
-            card("Inference latency", "Not measured", "Run a device timing to record it")
+    a.metric("Complete model bundle", f"{chosen_bundle.stat().st_size/1024:.1f} KiB")
+    b.metric("Expert models", len(bundle["experts"]))
+    st.caption(f"Artifact: {bundle['artifact_id']} · created {bundle['created_at']}")
+    st.write("Confidence policy", bundle["policy"])
+    st.write("Event policy", bundle["events"])
+    if st.button("Measure this window locally"):
+        row = selected.iloc[0].to_dict()
+        result = process_row(row, "Benchmark", Runtime(bundle, mode))
+        st.metric("Processing time", f"{result['total_ms']:.2f} ms")
+        st.caption("One host measurement; acquisition time and device energy are excluded.")
+    with st.expander("Training provenance"):
+        st.json({"artifact_id": bundle["artifact_id"], "dataset_sha256": bundle.get("dataset_sha256"),
+                 "roles": bundle["manifest"], "selection": bundle["selections"], "environment": bundle["environment"]})

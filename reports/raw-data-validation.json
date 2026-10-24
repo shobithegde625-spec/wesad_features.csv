@@ -1,0 +1,77 @@
+{
+  "source_page": "https://ubi29.informatik.uni-siegen.de/usi/data_wesad.html",
+  "archive_bytes": 2249444501,
+  "official_checksum_verified": true,
+  "archive_hashes": {
+    "sha256": "5e15d2606adf16d819ba535c1786d92e94bae5ff5392f7ae01fb63f9938fd71c",
+    "sha1": "bae786bf599ef28e42e1c2e18da9b84d685e84e7"
+  },
+  "original_feature_csv_sha256": "746609cfc4d39c6ff29aa202a7f10b0ef44f12f3901300d761581c8fdf2b42ef",
+  "subjects": 15,
+  "classification_windows": 445,
+  "replay_windows": 1442,
+  "replay_binary_scored_windows": 434,
+  "replay_unsupported_windows": 1008,
+  "original_rows_and_labels_match": true,
+  "maximum_absolute_feature_difference": {
+    "mean": 0.0,
+    "std": 0.0,
+    "minimum": 0.0,
+    "maximum": 0.0,
+    "median": 0.0,
+    "skewness": 8.881784197001252e-16,
+    "kurtosis": 0.0
+  },
+  "quality": {
+    "classification": {
+      "ecg": {
+        "usable": 445,
+        "total": 445,
+        "reasons": {
+          "ok": 445
+        }
+      },
+      "eda": {
+        "usable": 445,
+        "total": 445,
+        "reasons": {
+          "ok": 445
+        }
+      },
+      "resp": {
+        "usable": 445,
+        "total": 445,
+        "reasons": {
+          "ok": 445
+        }
+      }
+    },
+    "replay": {
+      "ecg": {
+        "usable": 1442,
+        "total": 1442,
+        "reasons": {
+          "ok": 1442
+        }
+      },
+      "eda": {
+        "usable": 1442,
+        "total": 1442,
+        "reasons": {
+          "ok": 1442
+        }
+      },
+      "resp": {
+        "usable": 1440,
+        "total": 1442,
+        "reasons": {
+          "ok": 1440,
+          "unreliable_respiration": 2
+        }
+      }
+    }
+  },
+  "manual_diagnostic": "reports/multimodal-diagnostics/S9-baseline-waveforms.png",
+  "usage_terms": "Scientific, non-commercial use with credit to the dataset owners; see source page.",
+  "citation": "Schmidt, Reiss, Duerichen, Marberger and Van Laerhoven (2018). Introducing WESAD, a Multimodal Dataset for Wearable Stress and Affect Detection. ICMI. DOI: 10.1145/3242969.3242985."
+}

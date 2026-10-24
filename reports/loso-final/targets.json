@@ -1,0 +1,20 @@
+{
+  "clean_coverage": {
+    "status": "met",
+    "coverage": 0.9483146067415731,
+    "stress_coverage": 0.925
+  },
+  "compute_and_recall": {
+    "status": "pending_multimodal_waveform_experiment"
+  },
+  "false_events": {
+    "status": "pending_chronological_waveform_evaluation"
+  },
+  "target_device_latency": {
+    "status": "pending_physical_target_device_benchmark"
+  },
+  "energy": {
+    "status": "not_measured_no_battery_life_claim"
+  },
+  "interpretation": "Point targets are engineering checks, not statistical superiority or clinical guarantees. Inspect participant intervals and matched-coverage failure results."
+}

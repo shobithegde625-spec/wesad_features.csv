@@ -1,20 +1,20 @@
-
+"""Inspect provenance and complete bundle footprint."""
+import argparse
 from pathlib import Path
-import joblib
-import time
+from time import perf_counter
+from pulsepoint.training import load_bundle
 
-model_path = Path("stress_detection_model.joblib")
 
-# Measure saved model size
-size_bytes = model_path.stat().st_size
-size_kb = size_bytes / 1024
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--bundle", type=Path, required=True)
+    args = parser.parse_args()
+    started = perf_counter()
+    bundle = load_bundle(args.bundle)
+    print(f"Artifact: {bundle['artifact_id']}\nSize: {args.bundle.stat().st_size/1024:.2f} KiB\nLoad: {(perf_counter()-started)*1000:.3f} ms")
+    print("Experts:", ", ".join(bundle["experts"]))
+    print("Subject roles:", bundle["manifest"])
 
-# Load the model and measure loading time
-start = time.perf_counter()
-saved = joblib.load(model_path)
-loading_ms = (time.perf_counter() - start) * 1000
 
-print("--- Edge Model Measurements ---")
-print(f"Saved model size: {size_kb:.2f} KB")
-print(f"Model loading time: {loading_ms:.3f} ms")
-print("Inference runs locally: Yes")
+if __name__ == "__main__":
+    main()

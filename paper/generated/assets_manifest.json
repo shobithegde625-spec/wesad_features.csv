@@ -1,0 +1,37 @@
+{
+  "source": "Saved experiments; no retraining or operating-point selection",
+  "figures": {
+    "dashboard_monitoring.png": {
+      "sha256": "62e65925209e10bd91e51f8999e1559a86af30c9f1790beb0a03d0e0d74e9f66",
+      "bytes": 189307
+    },
+    "dashboard_overview.png": {
+      "sha256": "6c6b63f650d2810ecb07908fcaa4d8e6ee42646a96f2f0c878b91d8fe68b2548",
+      "bytes": 147448
+    },
+    "dashboard_prediction.png": {
+      "sha256": "0fe4a66b87906a82f730a140abb7b138f578925009ff10b8ab1dbf7481db5562",
+      "bytes": 167819
+    },
+    "dashboard_provenance.png": {
+      "sha256": "b6dd46e87fe37db73811f84dc932e27387fb90215bd25d2fd225c8f75fdb53c6",
+      "bytes": 187181
+    },
+    "heldout_confusion.pdf": {
+      "sha256": "211120f6403143d93012015393e391af62d22dc8b9ca6928bf703e50763d5e93",
+      "bytes": 16311
+    },
+    "heldout_confusion.png": {
+      "sha256": "0dddd6ef219bc463edf97ad08a441a6083b5e0b08ddf10e31c24ca5c47decd86",
+      "bytes": 41492
+    },
+    "revision_tradeoff.pdf": {
+      "sha256": "c4a032c8ba68da23191d854a17e2b0c2770b2870d5987e6929aee41d786b4e62",
+      "bytes": 23809
+    },
+    "waveform_diagnostic.png": {
+      "sha256": "762072a66b872f3f9607bed9fd2763dcf944c70ea9bc5e94dd7ec4f4725a8209",
+      "bytes": 256552
+    }
+  }
+}

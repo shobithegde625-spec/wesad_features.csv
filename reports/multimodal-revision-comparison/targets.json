@@ -1,0 +1,58 @@
+{
+  "v1": {
+    "clean_coverage": {
+      "status": "met",
+      "coverage": 0.9147465437788018,
+      "stress_coverage": 0.9736842105263158
+    },
+    "compute_and_recall": {
+      "status": "not_met_on_this_host",
+      "cpu_fraction_saved": 0.24698580187341335,
+      "stress_recall_loss": 0.046052631578947456
+    },
+    "false_events": {
+      "status": "met",
+      "relative_reduction": 0.6,
+      "absolute_reduction": 6,
+      "cascade_event_recall": 0.2,
+      "single_window_event_recall": 0.26666666666666666,
+      "cascade_median_delay_seconds": 360.0,
+      "single_window_median_delay_seconds": 390.0
+    },
+    "target_device_latency": {
+      "status": "pending_physical_target_device_benchmark"
+    },
+    "energy": {
+      "status": "not_measured_no_battery_life_claim"
+    },
+    "interpretation": "Point targets are engineering checks, not statistical superiority or clinical guarantees. Inspect participant intervals and matched-coverage failure results."
+  },
+  "v2": {
+    "clean_coverage": {
+      "status": "met",
+      "coverage": 1.0,
+      "stress_coverage": 1.0
+    },
+    "compute_and_recall": {
+      "status": "not_met_on_this_host",
+      "cpu_fraction_saved": 0.15080578176920212,
+      "stress_recall_loss": 0.006578947368421129
+    },
+    "false_events": {
+      "status": "met",
+      "relative_reduction": 0.5,
+      "absolute_reduction": 3,
+      "cascade_event_recall": 0.13333333333333333,
+      "single_window_event_recall": 0.06666666666666667,
+      "cascade_median_delay_seconds": 240.0,
+      "single_window_median_delay_seconds": 360.0
+    },
+    "target_device_latency": {
+      "status": "pending_physical_target_device_benchmark"
+    },
+    "energy": {
+      "status": "not_measured_no_battery_life_claim"
+    },
+    "interpretation": "Point targets are engineering checks, not statistical superiority or clinical guarantees. Inspect participant intervals and matched-coverage failure results."
+  }
+}
